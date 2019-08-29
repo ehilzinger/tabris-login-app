@@ -1,6 +1,7 @@
 import { TextView, Color, Font, Button, drawer } from 'tabris';
 import { loginPage } from '../pages/loginPage';
 import { heading_color, button_color_action, font_large } from '../config/config';
+import { logout } from './helpers';
 
 function getHeadingText(text) {
     return new TextView({
@@ -31,8 +32,8 @@ function initializeDrawer(navigationView) {
         background: button_color_action,
         highlightOnTouch: false
     }).onSelect(() => {
+        logout();
         navigationView.pages().detach();
-        drawer.enabled = false;
         navigationView.drawerActionVisible = false;
         navigationView.append(loginPage(navigationView));
     });

@@ -1,3 +1,4 @@
+import { drawer } from 'tabris';
 function getTimeOfDay(hours)    {
     if(hours <= 5) {
     return "Night";
@@ -13,4 +14,8 @@ function getTimeOfDay(hours)    {
     }
 }
 
-export { getTimeOfDay };
+function logout()   {
+    drawer.enabled = false;
+}
+
+export { getTimeOfDay, logout };

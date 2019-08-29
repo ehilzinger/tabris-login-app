@@ -61,6 +61,13 @@ export function loginPage(navigationView) {
         opacity: 0
     }).appendTo(page);
 
+    const copyrightText = new TextView({
+            bottom: true, height: 'auto',
+            left: 16, right: 16, bottom: 8, alignment: 'centerX',
+        text: 'Created by Enzo Hilzinger',
+        font: "normal thin 12px sans-serif"
+    }).appendTo(page);
+
     async function send() {
         if (username.text === "" && password.text === "") {
             infoText.animate({ opacity: 1 });
