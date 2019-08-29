@@ -11,3 +11,4 @@ snippets/package-lock.json
 *~
 snippets/dist
 .project
+.vscode/*
