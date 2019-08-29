@@ -1,6 +1,7 @@
 import { TextView, Color, Font, Button, drawer } from 'tabris';
 import { loginPage } from '../pages/loginPage';
-import { heading_color, button_color_action, font_large } from '../config/config';
+import { editProfilePage } from '../pages/editProfilePage';
+import { heading_color, button_color_action, font_large, info_color, font_info } from '../config/config';
 import { logout } from './helpers';
 
 function getHeadingText(text) {
@@ -22,7 +23,30 @@ function getActionButton(text) {
     });
 }
 
+function getInfoText(text)  {
+    return new TextView({
+        left: 16, right: 16, top: 'prev() 8',
+        alignment: 'centerX',
+        text: text,
+        textColor: info_color,
+        font: font_info,
+        opacity: 0
+    });
+}
+
 function initializeDrawer(navigationView) {
+    const editProfileButton = new Button({
+        layoutData: {
+             height: 'auto',
+            left: 16, right: 16
+        },
+        text: 'Edit Profile',
+        background: button_color_action,
+        highlightOnTouch: false
+    }).onSelect(() => {
+        navigationView.append(editProfilePage());
+        drawer.close();
+    });
     const logoutButton = new Button({
         layoutData: {
             bottom: true, height: 'auto',
@@ -38,6 +62,7 @@ function initializeDrawer(navigationView) {
         navigationView.append(loginPage(navigationView));
     });
     drawer.append(logoutButton);
+    drawer.append(editProfileButton);
 }
 
-export { getActionButton, getHeadingText, initializeDrawer };
+export { getActionButton, getHeadingText, initializeDrawer, getInfoText };

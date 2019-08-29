@@ -1,6 +1,5 @@
 import { Font, Color } from 'tabris';
 
-
 // Fonts
 const font_large = Font.from("normal thin 32px sans-serif");
 const font_info = Font.from("normal thin 20px sans-serif");

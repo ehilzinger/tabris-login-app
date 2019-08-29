@@ -1,11 +1,10 @@
-import { Button, TextInput, TextView, contentView, Color, Font, AnimationOptions, CheckBox, NavigationView, Page, drawer } from 'tabris';
+import { Button, TextInput, TextView, contentView, Color, Font, AnimationOptions, CheckBox, NavigationView, Page, drawer, ActivityIndicator } from 'tabris';
 import { mainPage } from './mainPage';
 import { registerPage } from './registerPage';
 import { heading_color, info_color, button_color_action, font_info } from '../config/config';
-import { getActionButton, getHeadingText } from '../modules/widgets';
+import { getActionButton, getHeadingText, getInfoText } from '../modules/widgets';
 import { getTimeOfDay } from '../modules/helpers';
-
-import { getUserName, api_url } from '../modules/api';
+import { api_url } from '../modules/api';
 
 const Base64 = require('js-base64').Base64;
 
@@ -14,7 +13,6 @@ export function loginPage(navigationView) {
         title: '',
         background: Color.white
     });
-
     const welcomeText = getHeadingText('Good '.concat(
         getTimeOfDay(new Date().getHours()))
     ).appendTo(page).animate({
@@ -34,13 +32,13 @@ export function loginPage(navigationView) {
     const username = new TextInput({
         left: 16, right: 16, top: 'prev() 40',
         message: 'Username'
-    }).onInput(({ text }) => infoText.opacity = 0).appendTo(page);
+    }).onInput(({ text }) => { infoText.animate({ opacity: 0 }); }).appendTo(page);
 
     const password = new TextInput({
         left: 16, right: 16, top: 'prev() 8',
         message: 'Password',
         type: 'password'
-    }).onInput(({ text }) => infoText.opacity = 0).appendTo(page);
+    }).onInput(({ text }) => { infoText.animate({ opacity: 0 }); }).appendTo(page);
 
     new CheckBox({
         left: 16, right: 16, top: 'prev() 8',
@@ -50,20 +48,13 @@ export function loginPage(navigationView) {
 
     const loginButton = getActionButton('Login').onSelect(send).appendTo(page);
 
-    const registerButton = getActionButton('Register').onSelect(() => { register(navigationView) }).appendTo(page);
+    const registerButton = getActionButton('Register').onSelect(() => { register(navigationView); }).appendTo(page);
 
-    const infoText = new TextView({
-        left: 16, right: 16, top: 'prev() 8',
-        alignment: 'centerX',
-        text: 'Please enter Pasword and Username',
-        textColor: info_color,
-        font: font_info,
-        opacity: 0
-    }).appendTo(page);
+    const infoText = getInfoText('Please enter Pasword and Username').appendTo(page);
 
     const copyrightText = new TextView({
-            bottom: true, height: 'auto',
-            left: 16, right: 16, bottom: 8, alignment: 'centerX',
+        bottom: true, height: 'auto',
+        left: 16, right: 16, bottom: 8, alignment: 'centerX',
         text: 'Created by Enzo Hilzinger',
         font: "normal thin 12px sans-serif"
     }).appendTo(page);
@@ -81,7 +72,8 @@ export function loginPage(navigationView) {
             if (response.ok) {
                 localStorage.setItem("access", data.access);
                 localStorage.setItem("refresh", data.refresh);
-                openMainPage(JSON.parse(Base64.decode(data.access.split('.')[1])).username, navigationView);
+                localStorage.setItem("username", JSON.parse(Base64.decode(data.access.split('.')[1])).username);
+                openMainPage(localStorage.getItem("username"), navigationView);
             } else {
                 infoText.text = "Wrong Password or Username";
                 infoText.animate({ opacity: 1 });
@@ -89,13 +81,13 @@ export function loginPage(navigationView) {
         }
     }
 
-    function openMainPage(username, navigationView) {
-        mainPage(username, navigationView).appendTo(navigationView);
+    function openMainPage(_username, _navigationView) {
+        mainPage(_username, _navigationView).appendTo(_navigationView);
         page.dispose();
     }
 
-    function register(navigationView) {
-        registerPage().appendTo(navigationView);
+    function register(_navigationView) {
+        registerPage().appendTo(_navigationView);
     }
 
     return page;

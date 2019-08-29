@@ -5,41 +5,41 @@ import { postDataToEndpoint } from '../modules/api';
 
 export function registerPage() {
 
-    const registerPage = new Page({ title: 'Join In', background: Color.white, autoDispose: false });
+    const _registerPage = new Page({ title: 'Join In', background: Color.white, autoDispose: true });
 
     const wasAdded = [];
 
     const progress = new ProgressBar({
         left: 16, right: 16, maximum: 100
-    }).appendTo(registerPage);
+    }).appendTo(_registerPage);
 
     const username = new TextInput({
         left: 16, right: 16, top: 'prev() 8',
         message: 'Username'
-    }).onInput(({ text }) => updateProgress(username)).appendTo(registerPage);
+    }).onInput(({ text }) => updateProgress(username)).appendTo(_registerPage);
 
     const email = new TextInput({
         left: 16, right: 16, top: 'prev() 8',
         message: 'Email'
-    }).onInput(({ text }) => updateProgress(email)).appendTo(registerPage);
+    }).onInput(({ text }) => updateProgress(email)).appendTo(_registerPage);
 
     const password = new TextInput({
         left: 16, right: 16, top: 'prev() 8',
         message: 'Password',
         type: 'password'
-    }).onInput(({ text }) => updateProgress(password)).appendTo(registerPage);
+    }).onInput(({ text }) => updateProgress(password)).appendTo(_registerPage);
 
     const confirm_password = new TextInput({
         left: 16, right: 16, top: 'prev() 8',
         message: 'Confirm Password',
         type: 'password'
-    }).onInput(({ text }) => updateProgress(confirm_password)).appendTo(registerPage);
+    }).onInput(({ text }) => updateProgress(confirm_password)).appendTo(_registerPage);
 
     new CheckBox({
         left: 16, right: 16, top: 'prev() 8',
         text: 'Show password'
     }).onCheckedChanged(event => password.revealPassword = event.value)
-        .appendTo(registerPage);
+        .appendTo(_registerPage);
 
     const accept_terms = new CheckBox({
         left: 16, right: 16, top: 'prev() 8',
@@ -54,9 +54,9 @@ export function registerPage() {
             accept_terms.textColor = Color.black;
         }
         changeColor();
-    }).appendTo(registerPage);
+    }).appendTo(_registerPage);
 
-    getActionButton('Register').onSelect(register).appendTo(registerPage);
+    getActionButton('Register').onSelect(register).appendTo(_registerPage);
 
     const infoText = new TextView({
         left: 16, right: 16, top: 'prev() 8',
@@ -65,10 +65,10 @@ export function registerPage() {
         textColor: info_color,
         font: font_info,
         opacity: 0
-    }).appendTo(registerPage);
+    }).appendTo(_registerPage);
 
     function register() {
-        let errors = [];
+        const errors = [];
         if (username.text === "" || email.text === "" || password.text === "" || confirm_password.text === "") {
             infoText.animate({ opacity: 1 });
             infoText.text = 'Please fill out all required fields \n \n';
@@ -110,7 +110,7 @@ export function registerPage() {
                         new tabris.AlertDialog({
                             title: json.message.concat('\nYou may login now'),
                             buttons: { ok: 'OK' }
-                        }).onCloseOk(() => { registerPage.dispose(); }).open();
+                        }).onCloseOk(() => { _registerPage.dispose(); }).open();
                     }
                 });
             });
@@ -134,11 +134,10 @@ export function registerPage() {
     function changeColor() {
         if (progress.selection >= progress.maximum) {
             progress.tintColor = Color.green;
-        }
-        else {
+        } else {
             progress.tintColor = button_color_action;
         }
     }
 
-    return registerPage;
+    return _registerPage;
 }

@@ -16,6 +16,7 @@ function getTimeOfDay(hours)    {
 
 function logout()   {
     drawer.enabled = false;
+    localStorage.clear();
 }
 
 export { getTimeOfDay, logout };

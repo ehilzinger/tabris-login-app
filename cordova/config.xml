@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='utf-8'?>
-<widget id="TheEny53.surveymanager" version="0.1.0">
+<?xml version="1.0" encoding="utf-8" ?>
+<widget id="TheEny53.surveymanager" version="0.1.0" xmlns:android="http://schemas.android.com/apk/res/android">
   <name>Survey Manager</name>
   <description>
     Example Tabris.js App
@@ -8,4 +8,10 @@
     Enzo Hilzinger
   </author>
   <preference name="EnableDeveloperConsole" value="$IS_DEBUG" />
+  <platform name="android">
+    <config-file target="app/src/main/AndroidManifest.xml" parent="/manifest">
+      <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+      <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    </config-file>
+  </platform>
 </widget>
