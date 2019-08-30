@@ -1,22 +1,31 @@
 import { drawer } from 'tabris';
-function getTimeOfDay(hours)    {
-    if(hours <= 5) {
-    return "Night";
+
+const minimum_name_length = 6;
+
+export function getTimeOfDay(hours) {
+    if (hours <= 5) {
+        return "Night";
     }
-    if(hours <= 12) {
+    if (hours <= 12) {
         return "Morning";
     }
-    if(hours<=18){
+    if (hours <= 18) {
         return "Afternoon";
     }
-    if(hours<=23){
+    if (hours <= 23) {
         return "Evening";
     }
 }
 
-function logout()   {
+export function logout() {
     drawer.enabled = false;
     localStorage.clear();
 }
 
-export { getTimeOfDay, logout };
+export function emailIsValid(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+export function getNameIsMinimalLength(name) {
+    return name.length >= minimum_name_length;
+}
