@@ -1,7 +1,7 @@
-import { Button, TextInput, TextView, contentView, Color, Font, AnimationOptions, CheckBox, NavigationView, Page, drawer, ActivityIndicator } from 'tabris';
+import { Button, TextInput, TextView, Composite, contentView, Color, Font, ActivityIndicator, AnimationOptions, CheckBox, NavigationView, Page, drawer, ActivityIndicator } from 'tabris';
 import { mainPage } from './mainPage';
 import { registerPage } from './registerPage';
-import { heading_color, info_color, button_color_action, font_info } from '../config/config';
+import { heading_color, info_color, button_color_action, font_info, success_color } from '../config/config';
 import { getActionButton, getHeadingText, getInfoText } from '../modules/widgets';
 import { getTimeOfDay } from '../modules/helpers';
 import { login, api_url } from '../modules/api';
@@ -13,6 +13,7 @@ export function loginPage(navigationView) {
         title: '',
         background: Color.white
     });
+
     const welcomeText = getHeadingText('Good '.concat(
         getTimeOfDay(new Date().getHours()))
     ).appendTo(page).animate({
@@ -63,8 +64,21 @@ export function loginPage(navigationView) {
         if (username.text === "" && password.text === "") {
             infoText.animate({ opacity: 1 });
         } else {
+            loginButton.animate({
+        transform: {
+            scaleX: .95,
+            scaleY: .95
+        }
+    }, {
+            duration: 500,
+            repeat: Infinity,
+            reverse: true,
+            easing: 'ease-out'
+        }
+            );
             const logon_success = await login(username.text, password.text);
             if (logon_success) {
+                loginButton.background = success_color;
                 openMainPage(localStorage.getItem("username"), navigationView);
             } else {
                 infoText.text = "Wrong Password or Username";
