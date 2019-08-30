@@ -4,7 +4,7 @@ import { registerPage } from './registerPage';
 import { heading_color, info_color, button_color_action, font_info } from '../config/config';
 import { getActionButton, getHeadingText, getInfoText } from '../modules/widgets';
 import { getTimeOfDay } from '../modules/helpers';
-import { api_url } from '../modules/api';
+import { login, api_url } from '../modules/api';
 
 const Base64 = require('js-base64').Base64;
 
@@ -46,7 +46,7 @@ export function loginPage(navigationView) {
     }).onCheckedChanged(event => password.revealPassword = event.value)
         .appendTo(page);
 
-    const loginButton = getActionButton('Login').onSelect(send).appendTo(page);
+    const loginButton = getActionButton('Login').onSelect(_login).appendTo(page);
 
     const registerButton = getActionButton('Register').onSelect(() => { register(navigationView); }).appendTo(page);
 
@@ -59,20 +59,12 @@ export function loginPage(navigationView) {
         font: "normal thin 12px sans-serif"
     }).appendTo(page);
 
-    async function send() {
+    async function _login() {
         if (username.text === "" && password.text === "") {
             infoText.animate({ opacity: 1 });
         } else {
-            const formData = new FormData();
-            formData.set('username', username.text);
-            formData.append('password', password.text);
-            const response = await fetch(api_url.concat('auth/token/'), { method: 'POST', body: formData });
-            const data = await response.json();
-
-            if (response.ok) {
-                localStorage.setItem("access", data.access);
-                localStorage.setItem("refresh", data.refresh);
-                localStorage.setItem("username", JSON.parse(Base64.decode(data.access.split('.')[1])).username);
+            const logon_success = await login(username.text, password.text);
+            if (logon_success) {
                 openMainPage(localStorage.getItem("username"), navigationView);
             } else {
                 infoText.text = "Wrong Password or Username";

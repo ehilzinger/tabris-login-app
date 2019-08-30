@@ -1,7 +1,8 @@
 import { Page, Color, drawer, TextView, TextInput, CheckBox, ProgressBar, DateDialog } from 'tabris';
-import { heading_color, info_color, button_color_action, font_large, font_info } from '../config/config';
+import { heading_color, info_color, button_color_action, font_large, font_info, success_color } from '../config/config';
 import { getActionButton, getHeadingText } from '../modules/widgets';
-import { postDataToEndpoint } from '../modules/api';
+import { postDataToEndpoint, register_endpoint } from '../modules/api';
+import { emailIsValid, getNameIsMinimalLength } from '../modules/helpers';
 
 export function registerPage() {
 
@@ -48,7 +49,7 @@ export function registerPage() {
         if (event.value) {
             infoText.animate({ opacity: 0 });
             progress.selection += 20;
-            accept_terms.textColor = Color.green;
+            accept_terms.textColor = success_color;
         } else {
             progress.selection -= 20;
             accept_terms.textColor = Color.black;
@@ -56,7 +57,7 @@ export function registerPage() {
         changeColor();
     }).appendTo(_registerPage);
 
-    getActionButton('Register').onSelect(register).appendTo(_registerPage);
+    const registerButton = getActionButton('Register').onSelect(register).appendTo(_registerPage);
 
     const infoText = new TextView({
         left: 16, right: 16, top: 'prev() 8',
@@ -68,34 +69,32 @@ export function registerPage() {
     }).appendTo(_registerPage);
 
     function register() {
-        const errors = [];
         if (username.text === "" || email.text === "" || password.text === "" || confirm_password.text === "") {
-            infoText.animate({ opacity: 1 });
-            infoText.text = 'Please fill out all required fields \n \n';
-            errors.push("missing_field");
+            addErrorInfo('Please fill out all required fields \n \n', 'missing_field');
         } else {
-            infoText.text = '';
-            errors.pop("missing_field");
+            removeErrorInfo("missing_field");
         }
         if (!accept_terms.checked) {
-            infoText.animate({ opacity: 1 });
-            infoText.text += 'Please accept the Terms \n \n';
-            errors.push("terms_unchecked");
+            addErrorInfo('Please accept the Terms \n \n', 'terms_unchecked');
         } else {
-            infoText.text += '';
-            errors.pop("terms_unchecked");
+            removeErrorInfo("terms_unchecked");
         }
         if (!(password.text === confirm_password.text)) {
-            infoText.animate({ opacity: 1 });
-            infoText.text += 'Passwords do not match \n \n';
-            errors.push("passwords_not_matching");
+            addErrorInfo('Passwords do not match \n \n', 'passwords_not_matching');
         } else {
-            infoText.text += '';
-            errors.pop("passwords_not_matching");
+            removeErrorInfo("passwords_not_matching");
+        }
+        if (!emailIsValid(email.text) && email.text !== "") {
+            addErrorInfo('Email is invalid \n \n', 'email_invalid');
+        } else {
+            removeErrorInfo("email_invalid");
+        }
+        if (!getNameIsMinimalLength(username.text) && username.text !== "") {
+            addErrorInfo('Minimum Username length is six \n \n', 'username_min_length')
         }
 
         if (errors.length === 0) {
-            postDataToEndpoint('register/', false, {
+            postDataToEndpoint(register_endpoint, false, {
                 username: username.text,
                 password: password.text,
                 email: email.text
@@ -104,7 +103,7 @@ export function registerPage() {
                     if (!response.ok) {
                         new tabris.AlertDialog({
                             title: json.message,
-                            buttons: { ok: 'OK' }
+                            buttons: { ok: 'Understood' }
                         }).open();
                     } else {
                         new tabris.AlertDialog({
@@ -116,6 +115,36 @@ export function registerPage() {
             });
         }
 
+    }
+
+    const errors = [];
+
+    function addErrorInfo(error, error_code) {
+        registerButton.animate({
+            opacity: 0.5,
+            transform: {
+                scaleX: 1.1,
+                scaleY: 1.1,
+                rotation: -.05
+            }
+        },
+            {
+                duration: 100,
+                repeat: 3,
+                reverse: true,
+                easing: 'ease-out'
+            });
+        if (!infoText.text.includes(error)) {
+            infoText.text += error;
+            errors.push(error_code);
+            infoText.animate({ opacity: 1 });
+
+        }
+    }
+
+    function removeErrorInfo(errorcode) {
+        infoText.text += '';
+        errors.pop(errorcode);
     }
 
     function updateProgress(origin) {
