@@ -6,41 +6,41 @@ import { emailIsValid, getNameIsMinimalLength } from '../modules/helpers';
 
 export function registerPage() {
 
-    const _registerPage = new Page({ title: 'Join In', background: Color.white, autoDispose: true });
+    const page = new Page({ title: 'Join In', background: Color.white, autoDispose: true });
 
     const wasAdded = [];
 
     const progress = new ProgressBar({
         left: 16, right: 16, maximum: 100
-    }).appendTo(_registerPage);
+    }).appendTo(page);
 
     const username = new TextInput({
         left: 16, right: 16, top: 'prev() 8',
         message: 'Username'
-    }).onInput(({ text }) => updateProgress(username)).appendTo(_registerPage);
+    }).onInput(({ text }) => updateProgress(username)).appendTo(page);
 
     const email = new TextInput({
         left: 16, right: 16, top: 'prev() 8',
         message: 'Email'
-    }).onInput(({ text }) => updateProgress(email)).appendTo(_registerPage);
+    }).onInput(({ text }) => updateProgress(email)).appendTo(page);
 
     const password = new TextInput({
         left: 16, right: 16, top: 'prev() 8',
         message: 'Password',
         type: 'password'
-    }).onInput(({ text }) => updateProgress(password)).appendTo(_registerPage);
+    }).onInput(({ text }) => updateProgress(password)).appendTo(page);
 
     const confirm_password = new TextInput({
         left: 16, right: 16, top: 'prev() 8',
         message: 'Confirm Password',
         type: 'password'
-    }).onInput(({ text }) => updateProgress(confirm_password)).appendTo(_registerPage);
+    }).onInput(({ text }) => updateProgress(confirm_password)).appendTo(page);
 
     new CheckBox({
         left: 16, right: 16, top: 'prev() 8',
         text: 'Show password'
     }).onCheckedChanged(event => password.revealPassword = event.value)
-        .appendTo(_registerPage);
+        .appendTo(page);
 
     const accept_terms = new CheckBox({
         left: 16, right: 16, top: 'prev() 8',
@@ -55,9 +55,9 @@ export function registerPage() {
             accept_terms.textColor = Color.black;
         }
         changeColor();
-    }).appendTo(_registerPage);
+    }).appendTo(page);
 
-    const registerButton = getActionButton('Register').onSelect(register).appendTo(_registerPage);
+    const registerButton = getActionButton('Register').onSelect(register).appendTo(page);
 
     const infoText = new TextView({
         left: 16, right: 16, top: 'prev() 8',
@@ -66,7 +66,7 @@ export function registerPage() {
         textColor: info_color,
         font: font_info,
         opacity: 0
-    }).appendTo(_registerPage);
+    }).appendTo(page);
 
     function register() {
         if (username.text === "" || email.text === "" || password.text === "" || confirm_password.text === "") {
@@ -109,7 +109,7 @@ export function registerPage() {
                         new tabris.AlertDialog({
                             title: json.message.concat('\nYou may login now'),
                             buttons: { ok: 'OK' }
-                        }).onCloseOk(() => { _registerPage.dispose(); }).open();
+                        }).onCloseOk(() => { page.dispose(); }).open();
                     }
                 });
             });
@@ -168,5 +168,5 @@ export function registerPage() {
         }
     }
 
-    return _registerPage;
+    return page;
 }

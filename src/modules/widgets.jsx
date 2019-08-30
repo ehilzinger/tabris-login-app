@@ -1,6 +1,7 @@
 import { TextView, Color, Font, Button, drawer } from 'tabris';
 import { loginPage } from '../pages/loginPage';
 import { editProfilePage } from '../pages/editProfilePage';
+import { overviewPage } from '../pages/overviewPage';
 import { heading_color, button_color_action, font_large, info_color, font_info } from '../config/config';
 import { logout } from './helpers';
 
@@ -37,6 +38,7 @@ function getInfoText(text)  {
 function initializeDrawer(navigationView) {
     const editProfileButton = new Button({
         layoutData: {
+            top: 'prev() 8',
              height: 'auto',
             left: 16, right: 16
         },
@@ -45,6 +47,18 @@ function initializeDrawer(navigationView) {
         highlightOnTouch: false
     }).onSelect(() => {
         navigationView.append(editProfilePage());
+        drawer.close();
+    });
+    const overviewButton = new Button({
+        layoutData: {
+            top: 'prev() 8',
+            left: 16, right: 16
+        },
+        text: 'View Overview',
+        background: button_color_action,
+        highlightOnTouch: false
+    }).onSelect(() => {
+        navigationView.append(overviewPage());
         drawer.close();
     });
     const logoutButton = new Button({
@@ -61,8 +75,9 @@ function initializeDrawer(navigationView) {
         navigationView.drawerActionVisible = false;
         navigationView.append(loginPage(navigationView));
     });
-    drawer.append(logoutButton);
+    drawer.append(overviewButton);
     drawer.append(editProfileButton);
+    drawer.append(logoutButton);
 }
 
 export { getActionButton, getHeadingText, initializeDrawer, getInfoText };
