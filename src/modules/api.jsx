@@ -1,7 +1,8 @@
-const api_url = 'https://survey-manager-be.herokuapp.com/';
-const token_endpoint = 'auth/token/';
-export const register_endpoint = 'register/';
-const auth_header_prefix = 'Bearer  ';
+const config = require('../../config.json');
+const api_url = config.api_url;
+const token_endpoint = config.token_obtain_url;
+const auth_header_prefix = config.auth_header_prefix;
+export const register_endpoint = config.register_url;
 
 export async function login(username, password) {
     const formData = new FormData();
