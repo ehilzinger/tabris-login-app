@@ -1,14 +1,11 @@
-import { Page, Color, drawer, TextView, Button } from 'tabris';
-import { heading_color, button_color_action, font_large } from '../config/config';
-import { getUserName } from '../modules/api';
-import { getActionButton, getHeadingText, getInfoText } from '../modules/widgets';
-import { Tab, TabFolder, contentView } from 'tabris';
+import { Page, Color, drawer } from 'tabris';
+import { color_heading } from '../config/config';
 
 
 export function mainPage(username, navigationView) {
     drawer.enabled = true;
     navigationView.drawerActionVisible = true;
-    navigationView.titleTextColor = heading_color;
+    navigationView.titleTextColor = color_heading;
     const page = new Page({ title: 'Welcome, '.concat(username), background: Color.white, autoDispose: true });
 
     return page;

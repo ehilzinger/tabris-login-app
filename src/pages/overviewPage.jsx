@@ -1,8 +1,5 @@
-import { Page, Color, drawer, TextView, Button } from 'tabris';
-import { heading_color, button_color_action, font_large } from '../config/config';
-import { getUserName } from '../modules/api';
-import { getActionButton, getHeadingText, getInfoText } from '../modules/widgets';
-import { Tab, TabFolder, contentView } from 'tabris';
+import { Page, Color } from 'tabris';
+import { Tab, TabFolder } from 'tabris';
 
 export function overviewPage() {
     const page = new Page({ title: 'Overview', background: Color.white, autoDispose: true });
@@ -12,8 +9,6 @@ export function overviewPage() {
 
     const overview_tab = new Tab({ title: 'Overview' }).appendTo(tabs);
     const secondary_tab = new Tab({ title: 'Stats' }).appendTo(tabs);
-
-    new TextView({ text: "Hello" }).appendTo(overview_tab);
 
     return page;
 }

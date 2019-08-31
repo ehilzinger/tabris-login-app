@@ -2,7 +2,7 @@ import { Button, TextInput, TextView, contentView, Color, Font, AnimationOptions
 import { mainPage } from './pages/mainPage';
 import { registerPage } from './pages/registerPage';
 import { loginPage } from './pages/loginPage';
-import { heading_color, info_color, button_color_action, font_info } from './config/config';
+import { color_heading, color_info, color_action, font_info } from './config/config';
 import { getActionButton, getHeadingText } from './modules/widgets';
 import { getTimeOfDay } from './modules/helpers';
 

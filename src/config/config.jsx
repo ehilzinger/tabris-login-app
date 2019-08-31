@@ -1,11 +1,12 @@
 import { Font, Color } from 'tabris';
+const config = require('../../config.json');
 
 // Fonts
-export const font_large = Font.from("normal thin 32px sans-serif");
-export const font_info = Font.from("normal thin 20px sans-serif");
+export const font_large = Font.from(config.fonts.font_large);
+export const font_info = Font.from(config.fonts.font_info);
 
 // Colors
-export const heading_color = new Color(235, 163, 56);
-export const button_color_action = new Color(235, 143, 52);
-export const info_color = new Color(235, 98, 52);
-export const success_color = new Color(38, 191, 41);
+export const color_heading = Color.from(config.colors.color_heading);
+export const color_action = Color.from(config.colors.color_action);
+export const color_info = Color.from(config.colors.color_info);
+export const color_success = Color.from(config.colors.color_success);

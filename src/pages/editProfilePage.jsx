@@ -1,6 +1,6 @@
 import { Page, Color, TextInput, TextView } from 'tabris';
 import { getActionButton, getInfoText } from '../modules/widgets';
-import { heading_color, button_color_action, font_large, info_color, font_info } from '../config/config';
+import { color_heading, font_large } from '../config/config';
 
 export function editProfilePage() {
     const page = new Page({ title: 'Edit Profile', background: Color.white, autoDispose: false });
@@ -9,7 +9,7 @@ export function editProfilePage() {
         left: 16, right: 16, top: 0,
         alignment: 'centerX',
         text: localStorage.getItem("username"),
-        textColor: heading_color,
+        textColor: color_heading,
         font: font_large
     });
 

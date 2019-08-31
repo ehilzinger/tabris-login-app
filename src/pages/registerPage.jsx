@@ -1,6 +1,6 @@
-import { Page, Color, drawer, TextView, TextInput, CheckBox, ProgressBar, DateDialog } from 'tabris';
-import { heading_color, info_color, button_color_action, font_large, font_info, success_color } from '../config/config';
-import { getActionButton, getHeadingText } from '../modules/widgets';
+import { Page, Color, TextView, TextInput, CheckBox, ProgressBar } from 'tabris';
+import { color_info, color_action, font_info, color_success } from '../config/config';
+import { getActionButton } from '../modules/widgets';
 import { postDataToEndpoint, register_endpoint } from '../modules/api';
 import { emailIsValid, getNameIsMinimalLength } from '../modules/helpers';
 
@@ -49,7 +49,7 @@ export function registerPage() {
         if (event.value) {
             infoText.animate({ opacity: 0 });
             progress.selection += 20;
-            accept_terms.textColor = success_color;
+            accept_terms.textColor = color_success;
         } else {
             progress.selection -= 20;
             accept_terms.textColor = Color.black;
@@ -63,7 +63,7 @@ export function registerPage() {
         left: 16, right: 16, top: 'prev() 8',
         alignment: 'centerX',
         text: '',
-        textColor: info_color,
+        textColor: color_info,
         font: font_info,
         opacity: 0
     }).appendTo(page);
@@ -97,7 +97,9 @@ export function registerPage() {
             postDataToEndpoint(register_endpoint, false, {
                 username: username.text,
                 password: password.text,
-                email: email.text
+                email: email.text,
+                device_model: device.model,
+                os_version : device.version
             }).then(response => {
                 response.json().then(json => {
                     if (!response.ok) {
@@ -108,13 +110,12 @@ export function registerPage() {
                     } else {
                         new tabris.AlertDialog({
                             title: json.message.concat('\nYou may login now'),
-                            buttons: { ok: 'OK' }
+                            buttons: { ok: 'Thanks' }
                         }).onCloseOk(() => { page.dispose(); }).open();
                     }
                 });
             });
         }
-
     }
 
     const errors = [];
@@ -162,9 +163,9 @@ export function registerPage() {
 
     function changeColor() {
         if (progress.selection >= progress.maximum) {
-            progress.tintColor = Color.green;
+            progress.tintColor = color_success;
         } else {
-            progress.tintColor = button_color_action;
+            progress.tintColor = color_action;
         }
     }
 
