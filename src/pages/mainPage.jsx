@@ -1,7 +1,6 @@
 import { Page, Color, drawer } from 'tabris';
 import { color_heading } from '../config/config';
 
-
 export function mainPage(username, navigationView) {
     drawer.enabled = true;
     navigationView.drawerActionVisible = true;
